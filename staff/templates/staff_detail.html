@@ -1,0 +1,71 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+
+{% block title %}HRMS - Chi Tiết Nhân Viên{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/add_staff.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-5 d-flex flex-column align-items-center justify-content-center h-100">
+    <h2 class="my-5">Chi Tiết Nhân Viên</h2>
+    <div class="employee-form">
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label>Họ Và Tên Nhân Viên</label>
+                <input type="text" class="form-control" value="{{ staff.full_name }}" readonly>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label>Email</label>
+                <input type="text" class="form-control" value="{{ staff.user.email }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label>Giới Tính</label>
+                <input type="text" class="form-control" value="{{ staff.get_gender_display }}" readonly>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label>Số Điện Thoại</label>
+                <input type="text" class="form-control" value="{{ staff.phone_number }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label>Ngày sinh</label>
+                <input type="text" class="form-control" value="{{ staff.birthdate|date:'d/m/Y' }}" readonly>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label>Địa Chỉ</label>
+                <input type="text" class="form-control" value="{{ staff.address }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label>Phòng Ban</label>
+                <input type="text" class="form-control" value="{{ staff.department }}" readonly>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label>Chức Vụ</label>
+                <input type="text" class="form-control" value="{{ staff.position }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label>Ngày Gia Nhập</label>
+                <input type="text" class="form-control" value="{{ staff.join_date|date:'d/m/Y' }}" readonly>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label>Lương Cơ Bản</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{{ staff.base_salary|floatformat:0 }}" readonly>
+                    <span class="input-group-text">VNĐ</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{% url 'staff:staff_list' %}" class="btn btn-primary-color">Quay lại</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

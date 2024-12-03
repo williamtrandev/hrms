@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg navbar-bold fixed-top" style="height: 64px">
+    <div class="container">
+        <a class="navbar-brand" href="#">HRMS</a>
+        <ul class="navbar-nav ml-auto gap-4">
+            <li class="nav-item">
+                <a class="nav-link {% if 'dashboard' in request.path %}active{% endif %}" href="/dashboard/staff">Trang Chủ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if 'attendance' in request.path %}active{% endif %}" href="/attendance/history">Chấm Công</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if 'leave' in request.path %}active{% endif %}" href="/leave/me">Nghỉ Phép</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if 'salaries' in request.path %}active{% endif %}" href="/salaries/me">Bảng Lương</a>
+            </li>
+        </ul>
+        <div class="dropdown" style="cursor: pointer">
+            <div
+                class="dropdown-toggle d-flex align-items-center gap-2"
+                data-bs-toggle="dropdown"
+            >
+                <div
+                    class="rounded-circle bg-primary d-flex align-items-center justify-content-center"
+                    style="width: 36px; height: 36px"
+                >
+                    <i class="fas fa-user text-white"></i>
+                </div>
+                <span class="d-none d-md-inline fw-bold">{{ user.staff_profile.full_name }}</span>
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                <li>
+                    <a class="dropdown-item py-2" href="/staff/detail/{{ user.staff_profile.id }}">
+                        <i class="fas fa-user-circle me-2"></i>Hồ sơ
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                    <a
+                        class="dropdown-item py-2 text-danger"
+                        href="/auth/logout"
+                    >
+                        <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

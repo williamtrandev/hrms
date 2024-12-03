@@ -1,0 +1,150 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+
+{% block title %}HRMS - Chấm Công{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Thông Tin Chấm Công</h2>
+
+    <!-- Thanh tìm kiếm và bộ lọc -->
+    <div class="search-container">
+        <form method="get" class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3" style="width: 500px;">
+                <div class="position-relative">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ search_query }}"
+                        placeholder="Tìm kiếm theo Mã NV, Tên..." 
+                        class="form-control ps-5"
+                    >
+                    <button type="submit" class="btn position-absolute top-0 start-0 h-100">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <select name="department" class="form-select">
+                    <option value="">Tất Cả Phòng Ban</option>
+                    {% for department in departments %}
+                        <option value="{{ department.id }}" 
+                            {% if department_filter == department.id|stringformat:"i" %}selected{% endif %}>
+                            {{ department.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="date" name="date" class="form-control" value="{{ date_filter }}" placeholder="Chọn ngày">
+            <button type="submit" class="btn btn-primary-color"><i class="fas fa-filter me-2"></i>Lọc</button>
+            <a href="{% url 'attendance:correction_response' %}" class="btn btn-primary-color">
+                Xem Yêu Cầu Xử Lý
+            </a>
+        </form>
+    </div>
+
+    <!-- Bảng hiển thị danh sách chấm công -->
+    <table>
+        <thead>
+            <tr>
+                <th>Mã Nhân Viên</th>
+                <th>Họ Và Tên</th>
+                <th>Phòng Ban</th>
+                <th>Tình Trạng</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th>Tổng Giờ Làm</th>
+                <th>Overtime</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance in page_obj %}
+            <tr>
+                <td>{{ attendance.staff.id }}</td>
+                <td>{{ attendance.staff.full_name }}</td>
+                <td>{{ attendance.staff.department }}</td>
+                <td>
+                    {% if attendance.is_late %}
+                        <span class="text-danger fw-bold">Trễ</span>
+                    {% else %}
+                        <span class="text-success fw-bold">Đúng giờ</span>
+                    {% endif %}
+                </td>
+                <td>{{ attendance.checkin|time:"H:i" }}</td>
+                <td>{{ attendance.checkout|time:"H:i" }}</td>
+                <td>
+                    {% if attendance.total_working %}
+                        {{ attendance.total_working }} Giờ
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if attendance.overtime %}
+                        {{ attendance.overtime }} Giờ
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="container pagination-container">
+        <!-- Display number of items per page -->
+        <div class="items-per-page">
+            <label for="per_page">Hiện</label>
+            <select id="per_page" name="per_page" onchange="updatePerPage(this.value)">
+                <option value="10" {% if page_obj.paginator.per_page == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if page_obj.paginator.per_page == 20 %}selected{% endif %}>20</option>
+                <option value="30" {% if page_obj.paginator.per_page == 30 %}selected{% endif %}>30</option>
+            </select>
+        </div>
+
+        <!-- Pagination Information -->
+        <div class="pagination-info">
+            <span>Hiển thị {{ page_obj.start_index }} đến {{ page_obj.end_index }} trong {{ page_obj.paginator.count }} bản ghi</span>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" class="prev">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                    <span>...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" class="next">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+
+function updatePerPage(value) {
+    let currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('per_page', value);
+    currentUrl.searchParams.set('page', '1');
+    window.location.href = currentUrl.toString();
+}
+</script>
+{% endblock %}

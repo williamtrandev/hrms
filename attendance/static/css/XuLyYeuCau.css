@@ -1,0 +1,80 @@
+/* Đặt font chữ mặc định và màu nền */
+body {
+    font-family: 'Lexend', sans-serif;
+    background-color: #ffffff;
+}
+
+/* Thanh điều hướng */
+.navbar {
+    background-color: #b6a4fc;
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: space-between;
+}
+
+.navbar-brand,
+.nav-link,
+.navbar .form-inline span {
+    color: #000;
+    font-weight: bold;
+}
+
+/* Mục tiêu đề */
+.table-container h2 {
+    color: #954bc4;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Bảng xử lý yêu cầu */
+.table {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #b8b8b8;
+    padding: 10px;
+}
+
+/* Các trạng thái */
+.status-pending {
+    color: #ffa500; /* Màu cam cho trạng thái "Đang chờ" */
+}
+
+.status-approved {
+    color: #28a745; /* Màu xanh lá cho trạng thái "Đã duyệt" */
+}
+
+.status-rejected {
+    color: #dc3545; /* Màu đỏ cho trạng thái "Đã từ chối" */
+}
+
+/* Nút hành động */
+.btn-success, .btn-danger {
+    font-size: 0.875rem;
+    padding: 5px 10px;
+}
+
+.btn-secondary {
+    background-color: #dcdcdc;
+    border: none;
+    color: #555;
+}
+
+.btn-secondary[disabled] {
+    color: #aaa;
+}
+
+/* Hiệu ứng khi di chuột qua nút */
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}

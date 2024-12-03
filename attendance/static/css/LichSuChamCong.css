@@ -1,0 +1,73 @@
+/* Reset and Base Styles */
+body {
+    font-family: 'Lexend', sans-serif;
+    background-color: #f3f4f6;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #d6b8ff;
+    padding: 1rem;
+}
+
+.navbar-brand {
+    color: #020101;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.navbar-nav {
+    margin: auto; /* Center-align the navigation links */
+}
+
+.nav-link {
+    color: #020101 !important;
+    font-weight: 500;
+    margin: 0 10px;
+}
+
+/* Styling for the table container */
+.table-container h2 {
+    color: #954bc4;
+    font-weight: 700;
+}
+
+.table-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+.btn-primary, .btn-checkin {
+    background-color: #a78bfa;
+    border-color: #a78bfa;
+    color: white;
+}
+
+/* Attendance Status Styling */
+.status-ok {
+    color: green;
+}
+
+.status-late {
+    color: red;
+}
+
+/* Table Styling */
+.table th, .table td {
+    text-align: center;
+}
+
+.heading-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Pagination Styling */
+.pagination .page-item.active .page-link {
+    background-color: #a78bfa;
+    border-color: #a78bfa;
+}

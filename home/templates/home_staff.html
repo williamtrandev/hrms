@@ -1,0 +1,27 @@
+{% extends 'layouts/staff.html' %}
+
+{% block title %}HRMS - Trang chủ{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center">Trang chủ</h1>
+    <div class="row text-center mt-4">
+      <div class="col-md-4 offset-md-2">
+        <div class="card p-3">
+          <i class="fas fa-user-clock fa-2x"></i>
+          <h3>Số ngày đi làm trễ</h3>
+          <p>{{ late_days }}</p>
+          <a href="/attendance/history">Danh sách chấm công </a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3">
+          <i class="fas fa-calendar-alt fa-2x"></i>
+          <h3>Số lượng yêu cầu nghỉ phép</h3>
+          <p>{{ leave_requests }}</p>
+          <a href="/leave/me">Danh sách nghỉ phép</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+
+{% block title %}HRMS - Chi tiết đơn nghỉ phép{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/baseL.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container my-5 d-flex flex-column align-items-center justify-content-center h-100">
+        <h2>Chi tiết đơn nghỉ phép</h2>
+        <form method="post" class="employee-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="form-group col-6 mb-3">
+                    <label for="ma_nv">Mã Nhân Viên</label>
+                    {{ form.staff_id }}
+                </div>
+                <div class="form-group col-6 mb-3">
+                    <label for="ho_va_ten">Họ Và Tên Nhân Viên</label>
+                    {{ form.staff_fullname }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6 mb-3">
+                    <label for="chuc_vu">Chức Vụ</label>
+                    {{ form.staff_position }}
+                </div>
+                <div class="form-group col-6 mb-3">
+                    <label for="ly_do_nghi">Lý Do Nghỉ</label>
+                    {{ form.reason }}
+    <!--                <select id="ly_do_nghi" name="ly_do_nghi">-->
+    <!--                    <option value="nghi_phep">Nghỉ Phép</option>-->
+    <!--                </select>-->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6 mb-3">
+                    <label for="bd_nghiphep">Bắt Đầu Nghỉ Phép</label>
+    <!--                <input type="date" id="bd_nghiphep" name="bd_nghiphep">-->
+                    {{ form.start_date }}
+                </div>
+                <div class="form-group col-6 mb-3">
+                    <label for="kt_nghiphep">Kết Thúc Nghỉ Phép</label>
+    <!--                <input type="date" id="kt_nghiphep" name="bd_nghiphep">-->
+                    {{ form.end_date }}
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="ly_do_chi_tiet">Lý Do Chi Tiết (Nếu Có)</label>
+                {{ form.reason_detail }}
+            </div>
+            <div></div>
+            <div class="form-group mb-3">
+                <label for="trang_thai">Trạng Thái</label>
+                {{ form.status }}
+<!--                <select id="trang_thai" name="trang_thai">-->
+<!--                    <option value="Đang chờ" {% if leave.status == 'Đang chờ' %}selected{% endif %}>Đang Chờ</option>-->
+<!--                    <option value="Duyệt" {% if leave.status == 'Duyệt' %}selected{% endif %}>Duyệt</option>-->
+<!--                    <option value="Không duyệt" {% if leave.status == 'Không duyệt' %}selected{% endif %}>Không Duyệt</option>-->
+<!--                </select>-->
+            </div>
+            <button type="submit" class="submit-btn">Cập Nhật</button>
+        </form>
+    </div>
+</body>
+</html>
+
+{% endblock %}

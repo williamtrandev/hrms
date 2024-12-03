@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #b6a4fc;
+    padding: 15px 20px;
+    color: black; /* Màu chữ đen */
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.navbar-brand {
+    font-size: 1.7em;
+    font-weight: bold;
+    color: black; /* Màu chữ đen cho tên thương hiệu */
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-menu li a {
+    color: black; /* Màu chữ đen cho các liên kết */
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.navbar-menu li a.active {
+    border-bottom: 2px solid black; /* Gạch chân cho mục "Nhân Viên" */
+}
+
+.navbar-menu li a:hover {
+    text-decoration: underline;
+}
+
+/* Tiêu đề */
+h2 {
+    color: #6c5ce7; /* Màu tím */
+    font-size: 28px; /* Cỡ chữ lớn */
+    font-weight: bold; /* Chữ đậm */
+    text-align: center; /* Căn trái */
+    margin-bottom: 20px;
+}
+
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #7b2cbf;
+}
+
+.employee-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input, select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.submit-btn {
+    grid-column: span 2;
+    padding: 10px;
+    background-color: #7b2cbf;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.submit-btn:hover {
+    background-color: #5a189a;
+}

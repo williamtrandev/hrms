@@ -1,0 +1,185 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+
+{% block title %}HRMS - Nhân viên{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Thông Tin Nhân Viên</h2>
+
+    <!-- Thanh tìm kiếm và bộ lọc -->
+    <div class="search-container">
+        <form method="get" class="d-flex align-items-center gap-3">
+            <div class="position-relative">
+                <input 
+                    type="text" 
+                    name="search" 
+                    value="{{ search_query }}"
+                    placeholder="Tìm kiếm theo Mã NV, Tên,..." 
+                    class="form-control ps-5"
+                >
+                <button type="submit" class="btn position-absolute top-0 start-0 h-100">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <select name="department" class="form-select">
+                <option value="">Tất Cả Phòng Ban</option>
+                {% for department in departments %}
+                    <option value="{{ department.id }}" 
+                        {% if department_filter == department.id|stringformat:"i" %}selected{% endif %}>
+                        {{ department.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary-color"><i class="fas fa-filter me-2"></i>Lọc</button>
+            <a href="{% url 'staff:add_staff' %}" class="btn btn-primary-color">
+                <i class="fas fa-plus"></i> Thêm Nhân Viên
+            </a>
+        </form>
+    </div>
+
+    <!-- Bảng hiển thị danh sách nhân viên -->
+    <table>
+        <thead>
+            <tr>
+                <th>Mã NV</th>
+                <th>Họ Và Tên</th>
+                <th>Phòng Ban</th>
+                <th>Chức Vụ</th>
+                <th>Giới Tính</th>
+                <th>Ngày Gia Nhập</th>
+                <th>Email Cá Nhân</th>
+                <th>Số Điện Thoại</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in page_obj %}
+            <tr>
+                <td>{{ employee.id }}</td>
+                <td>{{ employee.full_name }}</td>
+                <td>{{ employee.department }}</td>
+                <td>{{ employee.position }}</td>
+                <td>{{ employee.get_gender_display }}</td>
+                <td>{{ employee.join_date|date:"d/m/Y" }}</td>
+                <td>{{ employee.user.email }}</td>
+                <td>{{ employee.phone_number }}</td>
+                <td>
+                    <a href="{% url 'staff:detail_staff' employee.id %}" class="text-success text-decoration-none fw-bold me-3">Xem</a>
+                    <a href="{% url 'staff:edit_staff' employee.id %}" class="text-primary text-decoration-none fw-bold me-3">Sửa</a>
+                    <a href="#" class="text-danger text-decoration-none fw-bold" onclick="showDeleteModal({{ employee.id }})">Xóa</a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+    <div class="container pagination-container">
+        <!-- Display number of items per page -->
+        <div class="items-per-page">
+            <label for="per_page">Hiện</label>
+            <select id="per_page" name="per_page" onchange="updatePerPage(this.value)">
+                <option value="10" {% if page_obj.paginator.per_page == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if page_obj.paginator.per_page == 20 %}selected{% endif %}>20</option>
+                <option value="30" {% if page_obj.paginator.per_page == 30 %}selected{% endif %}>30</option>
+            </select>
+        </div>
+
+        <!-- Pagination Information -->
+        <div class="pagination-info">
+            <span>Hiển thị {{ page_obj.start_index }} đến {{ page_obj.end_index }} trong {{ page_obj.paginator.count }} nhân viên</span>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}" class="prev">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}" 
+                    class="page-number {% if page_obj.number == num %}active{% endif %}">
+                    {{ num }}
+                </a>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}" class="next">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+<script>
+let staffIdToDelete = null;
+
+function showDeleteModal(staffId) {
+    Swal.fire({
+        title: 'Xác nhận xóa',
+        text: "Bạn có chắc chắn muốn xóa nhân viên này không?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/staff/delete/${staffId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Đã xóa nhân viên thành công',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#6c5ce7'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Có lỗi xảy ra khi xóa nhân viên',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#6c5ce7'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Có lỗi xảy ra khi xóa nhân viên',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#6c5ce7'
+                });
+            });
+        }
+    });
+}
+
+function updatePerPage(value) {
+    let currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('per_page', value);
+    currentUrl.searchParams.set('page', '1');
+    window.location.href = currentUrl.toString();
+}
+</script>
+{% endblock %}

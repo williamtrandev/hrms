@@ -1,0 +1,143 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+
+{% block title %}HRMS - Nghỉ phép{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/baseL.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Quản lý nghỉ phép</h2>
+
+    <!-- Thanh tìm kiếm và bộ lọc -->
+    <div class="search-container">
+
+        <form method="get" class="d-flex align-items-center gap-3">
+            <div class="position-relative">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search_query }}"
+                    placeholder="Tìm kiếm theo Mã NV, Tên,..."
+                    class="form-control ps-5"
+                >
+                <button class="btn position-absolute top-0 start-0 h-100">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <select name="department" class="form-select">
+                <option value="">Tất Cả Phòng Ban</option>
+                {% for department in departments %}
+                    <option value="{{ department.id }}"
+                        {% if department_filter == department.id|stringformat:"i" %}selected{% endif %}>
+                        {{ department.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="date" id="searchDate" name="date">
+            <button type="submit" class="btn btn-primary-color"><i class="fas fa-filter me-2"></i>Lọc</button>
+        </form>
+
+    </div>
+
+    <!-- Bảng hiển thị danh sách nhân viên -->
+    <table>
+        <thead>
+            <tr>
+                <th>Mã Nhân Viên</th>
+                <th>Họ Và Tên</th>
+                <th>Phòng Ban</th>
+                <th>Bắt Đầu Nghỉ Phép</th>
+                <th>Kết Thúc Nghỉ Phép</th>
+                <th>Ngày Nộp Đơn</th>
+                <th>Lý Do Nghỉ</th>
+                <th>Trạng Thái</th>
+                <th>Xem Chi Tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for leave in page_obj %}
+            <tr>
+                <td>{{ leave.staff.id }}</td>
+                <td>{{ leave.staff.full_name }}</td>
+                <td>{{ leave.staff.department }}</td>
+                <td>{{ leave.start_date|date:"d/m/Y" }}</td>
+                <td>{{ leave.end_date|date:"d/m/Y" }}</td>
+                <td>{{ leave.created_at|date:"d/m/Y" }}</td>
+                <td>{{ leave.reason }}</td>
+                <td>
+                    <span class="
+                        {% if leave.status == 'Duyệt' %}
+                            text-success
+                        {% elif leave.status == 'Đang chờ' %}
+                            text-primary
+                        {% elif leave.status == 'Không duyệt' %}
+                            text-danger
+                        {% endif %}
+                    ">
+                        {{ leave.status }}
+                    </span>
+                </td>
+                <td>
+                    <a
+                            href="{% url 'leave:detail' leave.id %}"
+                            class="btn btn-primary px-2 py-1"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<div class="container pagination-container">
+    <!-- Display number of items per page -->
+    <div class="items-per-page">
+        <label for="per_page">Hiện</label>
+        <select id="per_page" name="per_page" onchange="updatePerPage(this.value)">
+            <option value="10" {% if page_obj.paginator.per_page == 10 %}selected{% endif %}>10</option>
+            <option value="20" {% if page_obj.paginator.per_page == 20 %}selected{% endif %}>20</option>
+            <option value="30" {% if page_obj.paginator.per_page == 30 %}selected{% endif %}>30</option>
+        </select>
+    </div>
+
+    <!-- Pagination Information -->
+    <div class="pagination-info">
+        <span>Hiển thị {{ page_obj.start_index }} đến {{ page_obj.end_index }} trong {{ page_obj.paginator.count }} đơn nghỉ phép</span>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}" class="prev">
+                <i class="fas fa-angle-left"></i>
+            </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}"
+                class="page-number {% if page_obj.number == num %}active{% endif %}">
+                {{ num }}
+            </a>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if search_query %}&search={{ search_query }}{% endif %}{% if department_filter %}&department={{ department_filter }}{% endif %}" class="next">
+                <i class="fas fa-angle-right"></i>
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function updatePerPage(value) {
+    let currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('per_page', value);
+    currentUrl.searchParams.set('page', '1');
+    window.location.href = currentUrl.toString();
+}
+</script>
+{% endblock %}

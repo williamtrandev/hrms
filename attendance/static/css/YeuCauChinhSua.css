@@ -1,0 +1,100 @@
+/* Đặt font chữ mặc định và màu nền cho trang */
+body {
+    font-family: 'Lexend', sans-serif;
+    background-color: #ffffff;
+}
+
+/* Thiết lập thanh điều hướng */
+.navbar {
+    background-color: #b6a4fc;
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: space-between;
+}
+
+.navbar-brand,
+.nav-link,
+.navbar .form-inline span {
+    color: #000;
+    font-weight: bold;
+}
+
+.nav-link {
+    padding-bottom: 5px;
+}
+
+/* Tạo hiệu ứng khi chọn mục "Chấm Công" */
+.navbar-nav .nav-item:nth-child(3) .nav-link {
+    border-bottom: 2px solid #000;
+}
+
+/* Tiêu đề và khu vực chứa bảng */
+.table-container h2 {
+    color: #954bc4;
+    font-weight: 700;
+}
+
+/* Tùy chỉnh nút gửi yêu cầu */
+.btn-primary {
+    background-color: #a78bfa;
+    border-color: #a78bfa;
+}
+
+/* Khu vực biểu mẫu chỉnh sửa */
+.form-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Điều chỉnh các trường biểu mẫu */
+.form-control {
+    font-size: 1rem;
+    padding: 0.75rem;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+/* Hiệu ứng cho nút khi di chuột qua */
+.btn-primary:hover {
+    background-color: #8e6fe6;
+    border-color: #8e6fe6;
+}
+
+/* Đặt kích thước và căn lề cho nhãn biểu mẫu */
+.form-group label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Tạo giao diện hộp kiểm và lựa chọn */
+select.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2rem;
+}
+
+/* Định dạng hộp văn bản đa dòng */
+textarea.form-control {
+    resize: none;
+    font-size: 1rem;
+}
+
+/* Điều chỉnh màu sắc và phong cách cho ADMIN */
+.navbar .form-inline span {
+    color: #333;
+    font-weight: 700;
+}
+
+/* Thiết lập kích thước khoảng cách giữa các phần */
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mt-4 {
+    margin-top: 1.5rem !important;
+}

@@ -1,0 +1,101 @@
+/* Đổi màu nền thanh điều hướng thành tím nhạt */
+.navbar {
+  background-color: #ddd2ff; /* Màu tím nhạt */
+  padding: 1rem;
+}
+
+/* Đổi màu chữ và phong cách của chữ trong thanh điều hướng */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 30px;
+  color: black;
+}
+
+.nav-link {
+  color: #333;
+  font-weight: normal;
+  font-size: 18px;
+  margin-right: 1.5rem;
+
+}
+.nav-link:hover {
+  color: #6a1b9a; /* Màu tím khi nhấp */
+}
+
+.navbar-brand:hover {
+  color: #333; /* Màu tím khi nhấp */
+}
+.nav-link.active {
+  color: #6a1b9a; /* Màu tím đậm cho mục "Trang Chủ" */
+  font-weight: bold;
+  border-bottom: 2px solid #6a1b9a; /* Đường gạch chân màu tím */
+}
+
+/* Phần thông tin của người dùng */
+.profile {
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.profile i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+/* Định dạng chính cho tiêu đề "Trang chủ" */
+.container h1 {
+  color: #6a1b9a; /* Màu tím */
+  font-weight: bold;
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* Định dạng thẻ thông tin */
+.card {
+  border: none;
+  background-color: #f3f1fc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin: 0.5rem;
+}
+
+.card h3 {
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.card a {
+  color: #888;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+/* Điều chỉnh biểu tượng và căn chỉnh cho khớp */
+.card i {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mt-4 {
+  margin-top: 2rem !important;
+}
+
+/* Điều chỉnh khoảng cách giữa các thẻ thông tin */
+.row .col-md-3 {
+  display: flex;
+  justify-content: center;
+}

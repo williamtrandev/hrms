@@ -1,0 +1,170 @@
+/* Đổi màu nền thanh điều hướng thành tím nhạt */
+.navbar {
+  background-color: #ddd2ff; /* Màu tím nhạt */
+  padding: 1rem;
+}
+
+/* Đổi màu chữ và phong cách của chữ trong thanh điều hướng */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 30px;
+  color: black;
+}
+
+.nav-link {
+  color: #333;
+  font-weight: normal;
+  font-size: 18px;
+  margin-right: 1.5rem;
+
+}
+.nav-link:hover {
+  color: #6a1b9a; /* Màu tím khi nhấp */
+}
+
+.navbar-brand:hover {
+  color: #333; /* Màu tím khi nhấp */
+}
+.nav-link.active {
+  color: #6a1b9a; /* Màu tím đậm cho mục "Trang Chủ" */
+  font-weight: bold;
+  border-bottom: 2px solid #6a1b9a; /* Đường gạch chân màu tím */
+}
+
+/* Phần thông tin của người dùng */
+.profile {
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.profile i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+/* Định dạng chính cho tiêu đề "Trang chủ" */
+.container h1 {
+  color: #6a1b9a; /* Màu tím */
+  font-weight: bold;
+  font-size: 2rem;
+  text-align: center;
+}
+
+
+
+
+/* Bảng */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+}
+
+th {
+    background-color: #b6a4fc;
+    color: black; /* Màu chữ đen cho tiêu đề bảng */
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    text-align: left;
+    color: black; /* Màu chữ đen cho nội dung bảng */
+    font-size: 14px;
+}
+
+/* Nút và ô tìm kiếm */
+button {
+    background-color: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #5a4cce;
+}
+
+.search-container input[type="text"], .search-container select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #dfe6e9;
+    border-radius: 5px;
+    width: 300px;
+    color: black; /* Màu chữ đen cho ô tìm kiếm */
+}
+
+
+
+
+
+/* Container cho phân trang */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Hiển thị số bản ghi trên mỗi trang */
+.records-per-page {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.records-per-page label {
+    color: #666;
+}
+
+.records-per-page select {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #666;
+    background-color: #f9f9f9;
+}
+
+/* Thông tin phân trang */
+.pagination-info {
+    color: #666;
+}
+
+/* Các nút điều khiển phân trang */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination-controls a {
+    color: #666;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination-controls a.active {
+    background-color: #d1c4fc;
+    color: #6c5ce7;
+    font-weight: bold;
+    border-color: #d1c4fc;
+}
+
+.pagination-controls a:hover {
+    background-color: #f0e9ff;
+    color: #6c5ce7;
+}

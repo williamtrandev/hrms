@@ -1,0 +1,563 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+
+{% block title %}HRMS - Lịch Sử Xử Lý Yêu Cầu{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Lịch Sử Xử Lý Yêu Cầu</h2>
+
+    <!-- Thanh tìm kiếm và bộ lọc -->
+    <div class="search-container">
+        <form method="get" class="d-flex align-items-center gap-3">
+            <select name="status" class="form-select">
+                <option value="">Tất Cả Trạng Thái</option>
+                <option value="approved">Chấp Nhận</option>
+                <option value="rejected">Từ Chối</option>
+            </select>
+            <select name="month" class="form-select">
+                <option value="">Tất Cả Tháng</option>
+                {% for month in months %}
+                    <option value="{{ month }}" {% if month_filter == month %}selected{% endif %}>
+                        Tháng {{ month }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary-color">
+                Lọc
+            </button>
+        </form>
+    </div>
+
+    <!-- Bảng hiển thị danh sách yêu cầu -->
+    <table class="mt-4">
+        <thead>
+            <tr>
+                <th>Thời Gian Tạo</th>
+                <th>Nhân Viên</th>
+                <th>Loại Yêu Cầu</th>   
+                <th>Lý Do</th>
+                <th>Trạng Thái</th>
+                <th>Người Xử Lý</th>
+                <th>Thời Gian Xử Lý</th>
+                <th>Ghi Chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in page_obj %}
+            <tr>
+                <td>{{ request.created_at|date:"d/m/Y H:i" }}</td>
+                <td>{{ request.attendance_tracking.staff.full_name }}</td>
+                <td>
+                    {% if request.request_type == 'checkin' %}
+                        <span class="badge bg-primary">
+                            <i class="fas fa-sign-in-alt me-1"></i>
+                            {{ request.get_request_type_display }}
+                        </span>
+                    {% elif request.request_type == 'checkout' %}
+                        <span class="badge bg-info">
+                            <i class="fas fa-sign-out-alt me-1"></i>
+                            {{ request.get_request_type_display }}
+                        </span>
+                    {% else %}
+                        <span class="badge bg-warning">
+                            <i class="fas fa-clock me-1"></i>
+                            {{ request.get_request_type_display }}
+                        </span>
+                    {% endif %}
+                </td>
+                <td>{{ request.reason }}</td>
+                <td>
+                    {% if request.response_type == 'pending' %}
+                        <span class="badge bg-warning">Chờ xử lý</span>
+                    {% elif request.response_type == 'approved' %}
+                        <span class="badge bg-success">Đã duyệt</span>
+                    {% elif request.response_type == 'rejected' %}
+                        <span class="badge bg-danger">Từ chối</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.processed_by %}
+                        {{ request.processed_by.email }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.processed_at %}
+                        {{ request.processed_at|date:"d/m/Y H:i" }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.response_reason %}
+                        {{ request.response_reason }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <div class="container pagination-container">
+        <div class="items-per-page">
+            <label for="per_page">Hiện</label>
+            <select id="per_page" name="per_page" onchange="updatePerPage(this.value)">
+                <option value="10" {% if page_obj.paginator.per_page == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if page_obj.paginator.per_page == 20 %}selected{% endif %}>20</option>
+                <option value="30" {% if page_obj.paginator.per_page == 30 %}selected{% endif %}>30</option>
+            </select>
+        </div>
+
+        <div class="pagination-info">
+            <span>Hiển thị {{ page_obj.start_index }} đến {{ page_obj.end_index }} trong {{ page_obj.paginator.count }} bản ghi</span>
+        </div>
+
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}" class="prev">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                    <span class="page-dots">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if department_filter %}&department={{ department_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}" class="next">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal chi tiết chấm công -->
+<div class="modal fade" id="attendanceModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-clock me-2"></i>
+                    Chi Tiết Chấm Công
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="attendanceForm">
+                    <input type="hidden" id="requestId">
+                    
+                    <!-- Thông tin nhân viên -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <i class="fas fa-user me-2"></i>Thông tin nhân viên
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Mã nhân viên:</label>
+                                    <input type="text" class="form-control" id="staffId" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Họ và tên:</label>
+                                    <input type="text" class="form-control" id="staffName" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Phòng ban:</label>
+                                    <input type="text" class="form-control" id="department" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin chấm công -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <i class="fas fa-clock me-2"></i>Thông tin chấm công
+                        </div>
+                        <div class="card-body">
+                            <!-- Ngày và thời gian -->
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-calendar-alt me-1"></i>Ngày làm việc:
+                                        </label>
+                                        <input type="date" class="form-control bg-light" id="attendanceDate" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-hourglass-half me-1"></i>Tổng giờ làm:
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control bg-light" id="totalWorking" readonly>
+                                            <span class="input-group-text">giờ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-exclamation-circle me-1"></i>Trạng thái:
+                                        </label>
+                                        <div class="d-flex align-items-center mt-2">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="checkbox" id="isLate" disabled>
+                                                <label class="form-check-label" for="isLate">
+                                                    Đi muộn
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Thời gian check-in/out -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card border-success">
+                                        <div class="card-header text-success">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Giờ vào
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-bold">Thời gian ghi nhận:</label>
+                                                    <input type="time" class="form-control" id="checkin">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-bold">Quy định:</label>
+                                                    <input type="text" class="form-control bg-light" value="08:00" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-info">
+                                        <div class="card-header text-info">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Giờ ra
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-bold">Thời gian ghi nhận:</label>
+                                                    <input type="time" class="form-control" id="checkout">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-bold">Quy định:</label>
+                                                    <input type="text" class="form-control bg-light" value="17:30" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ghi chú -->
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-sticky-note me-1"></i>Ghi chú:
+                                        </label>
+                                        <textarea class="form-control" id="note" rows="2" placeholder="Nhập ghi chú nếu cần..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin yêu cầu chỉnh sửa -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <i class="fas fa-edit me-2"></i>Thông tin yêu cầu chỉnh sửa
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Loại yêu cầu:</label>
+                                    <input type="text" class="form-control" id="correctionType" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Thời gian tạo:</label>
+                                    <input type="text" class="form-control" id="createdAt" readonly>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">Nội dung yêu cầu:</label>
+                                    <textarea class="form-control" id="correctionContent" rows="2" readonly></textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">Lý do:</label>
+                                    <textarea class="form-control" id="correctionReason" rows="2" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i><span class="ms-2">Đóng</span>
+                </button>
+                <button type="button" class="btn btn-primary-color" onclick="submitApproval()">
+                    <i class="fas fa-check"></i><span class="ms-2">Duyệt</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updatePerPage(value) {
+    let currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('per_page', value);
+    currentUrl.searchParams.set('page', '1');
+    window.location.href = currentUrl.toString();
+}
+
+// Thêm các hàm xử lý duyệt/từ chối
+async function approveRequest(requestId) {
+    
+    try {
+        const response = await fetch(`/attendance/correction-request/${requestId}/attendance-details`);
+        if (!response.ok) throw new Error('Không thể lấy thông tin chấm công');
+        
+        const data = await response.json();
+        
+        // Điền thông tin vào modal
+        document.getElementById('requestId').value = requestId;
+        document.getElementById('staffId').value = data.staff_id;
+        document.getElementById('staffName').value = data.staff_name;
+        document.getElementById('department').value = data.department;
+        document.getElementById('attendanceDate').value = data.date;
+        document.getElementById('checkin').value = data.checkin;
+        document.getElementById('checkout').value = data.checkout;
+        document.getElementById('totalWorking').value = data.total_working;
+        document.getElementById('isLate').checked = data.is_late;
+        document.getElementById('correctionType').value = data.correction_type;
+        document.getElementById('correctionContent').value = data.correction_content;
+        document.getElementById('correctionReason').value = data.correction_reason;
+        document.getElementById('createdAt').value = data.created_at;
+        
+        // Hiển thị modal
+        const modal = new bootstrap.Modal(document.getElementById('attendanceModal'));
+        modal.show();
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Có lỗi xảy ra khi lấy thông tin chấm công!',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+}
+
+async function submitApproval() {
+    const requestId = document.getElementById('requestId').value;
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+    const note = document.getElementById('note').value || '';
+
+    try {
+        const response = await fetch(`/attendance/correction-request/${requestId}/approve`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                checkin: checkin,
+                checkout: checkout,
+                note: note
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Đóng modal chi tiết
+            const modal = bootstrap.Modal.getInstance(document.getElementById('attendanceModal'));
+            modal.hide();
+
+            // Hiển thị thông báo thành công
+            await Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Đã duyệt yêu cầu thành công!',
+                confirmButtonColor: '#28a745'
+            });
+
+            location.reload();
+        } else {
+            throw new Error(data.message || 'Có lỗi xảy ra khi duyệt yêu cầu!');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: error.message || 'Có lỗi xảy ra khi duyệt yêu cầu!',
+            confirmButtonColor: '#dc3545'
+        });
+    }
+}
+
+async function rejectRequest(requestId) {
+    const { value: reason } = await Swal.fire({
+        title: 'Từ chối yêu cầu',
+        input: 'textarea',
+        inputLabel: 'Lý do từ chối',
+        inputPlaceholder: 'Nhập lý do từ chối...',
+        inputAttributes: {
+            'aria-label': 'Nhập lý do từ chối',
+            'rows': '3'
+        },
+        inputAutoTrim: true,
+        showCancelButton: true,
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Hủy',
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        reverseButtons: true,
+        inputValidator: (value) => {
+            if (!value || !value.trim()) {
+                return 'Vui lòng nhập lý do từ chối!';
+            }
+        }
+    });
+
+    if (reason) {
+        try {
+            const response = await fetch(`/attendance/correction-request/${requestId}/reject`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reason: reason.trim() })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Đóng modal chi tiết nếu đang mở
+                const modal = bootstrap.Modal.getInstance(document.getElementById('attendanceModal'));
+                if (modal) modal.hide();
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Đã từ chối yêu cầu thành công!',
+                    confirmButtonColor: '#28a745'
+                });
+                location.reload();
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: error.message || 'Có lỗi xảy ra khi từ chối yêu cầu!',
+                confirmButtonColor: '#dc3545'
+            });
+        }
+    }
+}
+
+// Hàm lấy CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<style>
+    .fas {
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+    }
+
+    /* Card header alignment */
+    .card-header {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        height: 48px;
+    }
+
+    .card-header i {
+        display: inline-block;
+        font-size: 14px;
+        margin-right: 8px !important;
+        position: relative;
+        top: -1px;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .form-label i {
+        display: inline-block;
+        font-size: 13px;
+        margin-right: 8px !important;
+        position: relative;
+        top: -1px;
+    }
+
+    /* Icon colors */
+    .card-header .fas.fa-user { color: #4e73df; }
+    .card-header .fas.fa-clock { color: #1cc88a; }
+    .card-header .fas.fa-edit { color: #f6c23e; }
+    .form-label .fas.fa-calendar-alt { color: #e74a3b; }
+    .form-label .fas.fa-hourglass-half { color: #36b9cc; }
+    .form-label .fas.fa-exclamation-circle { color: #f6c23e; }
+    .form-label .fas.fa-sticky-note { color: #858796; }
+    .card-header .fas.fa-sign-in-alt { color: #1cc88a; }
+    .card-header .fas.fa-sign-out-alt { color: #4e73df; }
+</style>
+{% endblock %}

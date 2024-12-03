@@ -1,0 +1,82 @@
+{% extends 'layouts/staff.html' %}
+{% load static %}
+
+{% block title %}HRMS - Đăng ký nghỉ phép{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/baseL.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container my-5 d-flex flex-column align-items-center justify-content-center h-100">
+        <h2>Đăng ký nghỉ phép</h2>
+        <form method="post" class="employee-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="ma_nv">Mã Nhân Viên</label>
+                    {{ form.staff_id }}
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="ho_va_ten">Họ Và Tên Nhân Viên</label>
+    <!--                <input type="text" id="ho_va_ten" name="ho_va_ten" readonly>-->
+                    {{ form.staff_fullname }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="chuc_vu">Chức Vụ</label>
+    <!--                <input type="text" id="chuc_vu" name="chuc_vu" readonly>-->
+                    {{ form.staff_position }}
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="ly_do_nghi">Lý Do Nghỉ</label>
+                    {{ form.reason }}
+    <!--                <select id="ly_do_nghi" name="ly_do_nghi">-->
+    <!--                    <option value="nghi_phep">Nghỉ Phép</option>-->
+    <!--                </select>-->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="bd_nghiphep">Bắt Đầu Nghỉ Phép</label>
+                    {{ form.start_date }}
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="kt_nghiphep">Kết Thúc Nghỉ Phép</label>
+                    {{ form.end_date }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group w-100 mb-3">
+                    <label for="ly_do_chi_tiet">Lý Do Chi Tiết (Nếu Có)</label>
+                    {{ form.reason_detail }}
+                </div>
+            </div>
+
+            {% if messages %}
+            <div class="alert alert-info">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+            <button type="submit" class="submit-btn">Lưu</button>
+        </form>
+    </div>
+</body>
+</html>
+
+{% endblock %}

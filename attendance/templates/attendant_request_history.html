@@ -1,0 +1,156 @@
+{% extends 'layouts/staff.html' %}
+{% load static %}
+
+{% block title %}HRMS - Lịch Sử Nộp Đơn{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Lịch Sử Nộp Đơn</h2>
+
+    <!-- Thanh tìm kiếm và bộ lọc -->
+    <div class="search-container">
+        <form method="get" class="d-flex align-items-center gap-3 justify-content-between">
+            <div class="d-flex gap-2" style="max-width: 800px;">
+                <select name="status" class="form-select">
+                    <option value="">Tất Cả Trạng Thái</option>
+                    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Chờ Duyệt</option>
+                    <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Đã Duyệt</option>
+                    <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Từ Chối</option>
+                </select>
+                <select name="month" class="form-select">
+                    <option value="">Tất Cả Tháng</option>
+                    {% for month in months %}
+                        <option value="{{ month }}" {% if month_filter == month %}selected{% endif %}>
+                            Tháng {{ month }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary-color">
+                    Lọc
+                </button>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'attendance:attendance_history' %}" class="btn btn-outline-primary" style="padding: 8px 20px;">
+                    </i>Lịch Sử Chấm Công
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bảng hiển thị danh sách yêu cầu -->
+    <div class="mt-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Thời Gian Tạo</th>
+                    <th>Loại Yêu Cầu</th>   
+                    <th>Lý Do</th>
+                    <th>Trạng Thái</th>
+                    <th>Người Xử Lý</th>
+                    <th>Thời Gian Xử Lý</th>
+                    <th>Phản Hồi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in page_obj %}
+                <tr>
+                    <td>{{ request.created_at|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if request.request_type == 'checkin' %}
+                            <span class="badge bg-primary">
+                                <i class="fas fa-sign-in-alt me-1"></i>Giờ vào
+                            </span>
+                        {% elif request.request_type == 'checkout' %}
+                            <span class="badge bg-info">
+                                <i class="fas fa-sign-out-alt me-1"></i>Giờ ra
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success bg-opacity-75">
+                                <i class="fas fa-clock me-1"></i>Overtime
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>{{ request.reason }}</td>
+                    <td>
+                        {% if request.response_type == 'pending' %}
+                            <span class="badge bg-warning">Chờ duyệt</span>
+                        {% elif request.response_type == 'approved' %}
+                            <span class="badge bg-success">Đã duyệt</span>
+                        {% elif request.response_type == 'rejected' %}
+                            <span class="badge bg-danger">Từ chối</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if request.processed_by %}
+                            {{ request.processed_by.email }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if request.processed_at %}
+                            {{ request.processed_at|date:"d/m/Y H:i" }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if request.response_reason %}
+                            {{ request.response_reason }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Phân trang -->
+    <div class="container pagination-container">
+        <div class="items-per-page">
+            <label for="per_page">Hiện</label>
+            <select id="per_page" name="per_page" onchange="updatePerPage(this.value)">
+                <option value="10" {% if page_obj.paginator.per_page == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if page_obj.paginator.per_page == 20 %}selected{% endif %}>20</option>
+                <option value="30" {% if page_obj.paginator.per_page == 30 %}selected{% endif %}>30</option>
+            </select>
+        </div>
+
+        <div class="pagination-info">
+            <span>Hiển thị {{ page_obj.start_index }} đến {{ page_obj.end_index }} trong {{ page_obj.paginator.count }} bản ghi</span>
+        </div>
+
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if year_filter %}&year={{ year_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="prev">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if year_filter %}&year={{ year_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if year_filter %}&year={{ year_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                    <span class="page-dots">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if year_filter %}&year={{ year_filter }}{% endif %}{% if month_filter %}&month={{ month_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="next">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

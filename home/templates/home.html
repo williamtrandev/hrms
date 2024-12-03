@@ -1,0 +1,43 @@
+{% extends 'layouts/admin.html' %}
+{% load humanize %}
+{% block title %}HRMS - Trang chủ{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Trang chủ</h1>
+    <div class="row text-center mt-4">
+        <div class="col-md-3">
+            <div class="card p-3 w-100">
+                <i class="fas fa-users fa-2x"></i>
+                <h3>Số lượng nhân viên</h3>
+                <p>{{total_employees}}</p>
+                <a href="/staff">Xem thông tin nhân viên</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 w-100">
+                <i class="fas fa-dollar-sign fa-2x"></i>
+                <h3>Tổng lương phải trả</h3>
+                <p>{{total_salary|intcomma}} VNĐ</p>
+                <a href="/salaries">Xem bảng lương</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 w-100">
+                <i class="fas fa-clock fa-2x"></i>
+                <h3>Tỷ lệ nhân viên đi làm đúng giờ</h3>
+                <p>{{attendance_rate}}%</p>
+                <a href="/attendance">Danh sách chấm công</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 w-100">
+                <i class="fas fa-calendar-alt fa-2x"></i>
+                <h3>Số lượng yêu cầu nghỉ phép</h3>
+                <p>{{pending_leaves}}</p>
+                <a href="/leave">Danh sách nghỉ phép</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,108 @@
+/* Thiết lập font chữ và nền trang */
+body {
+    font-family: 'Lexend', sans-serif;
+    background-color: #ffffff;
+}
+
+/* Thanh điều hướng */
+.navbar {
+    background-color: #b6a4fc;
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: space-between;
+}
+
+.navbar-brand,
+.nav-link,
+.navbar .form-inline span {
+    color: #000;
+    font-weight: bold;
+}
+
+.nav-link {
+    padding-bottom: 5px;
+}
+
+/* Đánh dấu mục "Chấm Công" trong thanh điều hướng */
+.navbar-nav .nav-item:nth-child(3) .nav-link {
+    border-bottom: 2px solid #000;
+}
+
+/* Khu vực tiêu đề */
+.table-container h2 {
+    color: #954bc4;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Bảng lịch sử xử lý yêu cầu */
+.table {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #b8b8b8;
+    padding: 10px;
+}
+
+/* Trạng thái */
+.status-approved {
+    color: #28a745; /* Màu xanh lá cho trạng thái "Đã duyệt" */
+}
+
+.status-rejected {
+    color: #dc3545; /* Màu đỏ cho trạng thái "Từ chối" */
+}
+
+.status-ok {
+    color: green;
+}
+
+.status-late {
+    color: red;
+}
+
+/* Các nút điều khiển */
+.btn-primary {
+    background-color: #a78bfa;
+    border-color: #a78bfa;
+}
+
+/* Hiệu ứng khi di chuột qua dòng trong bảng */
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Phân trang */
+.pagination .page-item.active .page-link {
+    background-color: #a78bfa;
+    border-color: #a78bfa;
+}
+
+.pagination .page-item .page-link {
+    color: #333;
+    border-radius: 50%;
+}
+
+/* Phong cách cho các mục phân trang */
+.pagination .page-item .page-link:hover {
+    background-color: #d4c1ff;
+    color: #333;
+}
+
+/* Định dạng dropdown trong bảng */
+.table .dropdown-toggle {
+    background: none;
+    border: none;
+    color: #333;
+}
+
+/* Khu vực chọn hiển thị */
+.select-container .form-control {
+    border-radius: 5px;
+}

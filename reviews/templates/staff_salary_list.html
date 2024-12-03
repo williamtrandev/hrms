@@ -1,0 +1,111 @@
+{% extends 'layouts/staff.html' %}
+{% load humanize %}
+
+{% block title %}HRMS - Lương của tôi{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Lương của tôi</h2>
+
+    <!-- Bộ lọc theo tháng -->
+    <div class="search-container mb-4">
+        <form method="get" class="d-flex align-items-center gap-3">
+            <select name="month" class="form-select">
+                {% for month in months %}
+                    <option value="{{ month }}" {% if month_filter == month %}selected{% endif %}>
+                        Tháng {{ month }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary-color">
+                <i class="fas fa-filter me-2"></i>Lọc
+            </button>
+        </form>
+    </div>
+
+    <!-- Bảng hiển thị danh sách lương -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tháng</th>
+                <th>Năm</th>
+                <th>Lương Cơ Bản</th>
+                <th>Thưởng</th>
+                <th>Tổng Lương</th>
+                <th>Ngày Trả Lương</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for salary in page_obj %}
+            <tr>
+                <td>{{ salary.pay_date|date:"m" }}</td>
+                <td>{{ salary.pay_date|date:"Y" }}</td>
+                <td>{{ salary.staff.base_salary|intcomma }} VNĐ</td>
+                <td>{{ salary.bonus|intcomma }} VNĐ</td>
+                <td>{{ salary.total_salary|intcomma }} VNĐ</td>
+                <td>{{ salary.pay_date|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Không có dữ liệu lương</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <div class="container pagination-container">
+        <div class="items-per-page">
+            <label for="per_page">Hiện</label>
+            <select id="per_page" name="per_page" onchange="updatePerPage(this.value)">
+                <option value="10" {% if page_obj.paginator.per_page == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if page_obj.paginator.per_page == 20 %}selected{% endif %}>20</option>
+                <option value="30" {% if page_obj.paginator.per_page == 30 %}selected{% endif %}>30</option>
+            </select>
+        </div>
+
+        <div class="pagination-info">
+            <span>Hiển thị {{ page_obj.start_index }} đến {{ page_obj.end_index }} trong {{ page_obj.paginator.count }} bản ghi</span>
+        </div>
+
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if month_filter %}&month={{ month_filter }}{% endif %}" class="prev">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if month_filter %}&month={{ month_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                    <a href="?page={{ num }}&per_page={{ page_obj.paginator.per_page }}{% if month_filter %}&month={{ month_filter }}{% endif %}" 
+                        class="page-number {% if page_obj.number == num %}active{% endif %}">
+                        {{ num }}
+                    </a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                    <span class="page-dots">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&per_page={{ page_obj.paginator.per_page }}{% if month_filter %}&month={{ month_filter }}{% endif %}" class="next">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function updatePerPage(value) {
+    let currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('per_page', value);
+    currentUrl.searchParams.set('page', '1');
+    window.location.href = currentUrl.toString();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+/* styles.css */
+
+body {
+    font-family: 'Lexend', sans-serif;
+    background-color: #020101;
+}
+
+.navbar {
+    background-color: #d6b8ff;
+    display: flex;
+    justify-content: center; /* Center the navigation bar */
+}
+
+.navbar-brand, .nav-link, .navbar .form-inline span {
+    color: #000000;
+    font-weight: bold;
+}
+
+.nav-link {
+    padding-bottom: 5px;
+    color: #000; /* Make the navigation links black */
+    font-weight: bold;
+}
+
+.navbar .form-inline input {
+    border-radius: 20px;
+}
+
+.table-container h2 {
+    color: #954bc4;
+    font-weight: 700;
+}
+
+.table-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #a78bfa;
+    border-color: #a78bfa;
+}
+
+.status-ok {
+    color: green;
+}
+
+.status-late {
+    color: red;
+}
+
+.table th, .table td {
+    text-align: center;
+    border: none; /* Remove table borders */
+}
+
+.table .dropdown-toggle {
+    background: none;
+    border: none;
+    color: #333;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #a78bfa;
+    border-color: #a78bfa;
+}
+
+/* Underline and style the "Chấm Công" menu item */
+.navbar-nav .nav-item:nth-child(3) .nav-link {
+    border-bottom: 2px solid #000;
+}

@@ -1,0 +1,82 @@
+{% extends 'layouts/admin.html' %} 
+{% load static %} 
+{% block title %}HRMS - Thêm Nhân Viên
+{% endblock %} 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/add_staff.css' %}" />
+{% endblock %} 
+{% block content %}
+<div
+    class="container my-5 d-flex flex-column align-items-center justify-content-center h-100"
+>
+    <h2 class="my-5">Thêm Nhân Viên</h2>
+    <form method="post" class="employee-form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label for="full_name">Họ Và Tên Nhân Viên</label>
+                {{ form.full_name }}
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label for="email">Email</label>
+                {{ form.email }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label for="gender">Giới Tính</label>
+                {{ form.gender }}
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label for="phone_number">Số Điện Thoại</label>
+                {{ form.phone_number }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label for="birthdate">Ngày sinh</label>
+                {{ form.birthdate }}
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label for="address">Địa Chỉ</label>
+                {{ form.address }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label for="department">Phòng Ban</label>
+                {{ form.department }}
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label for="position">Chức Vụ</label>
+                {{ form.position }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label for="join_date">Ngày Gia Nhập</label>
+                {{ form.join_date }}
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label for="base_salary">Lương Cơ Bản</label>
+                <div class="input-group">
+                    {{ form.base_salary }}
+                    <span class="input-group-text">VNĐ</span>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="d-flex justify-content-center mt-4">
+            <button type="submit" class="btn btn-primary-color">Lưu</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

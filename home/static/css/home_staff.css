@@ -1,0 +1,104 @@
+/* Thiết lập chung cho thanh điều hướng */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: #b59eff;
+  padding: 15px;
+
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: black;
+}
+
+.navbar-menu li {
+    display: inline;
+    margin-right: 10px;
+}
+.nav-link {
+  color: #000000;
+  font-weight: normal;
+  margin-right: 1.5rem;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  color: #b59eff; /* Màu tím đậm cho mục "Trang Chủ" */
+  font-weight: bold;
+  border-bottom: 2px solid #6a1b9a; /* Đường gạch chân màu tím */
+}
+
+/* Phần thông tin của người dùng */
+.profile {
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.profile i, .profile img {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.profile img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.container h1 {
+  color: #6a1b9a; /* Màu tím đậm */
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+/* Định dạng thẻ thông tin */
+.card {
+  border: none;
+  background-color: #f3f1fc; /* Màu nền thẻ */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin: 0.5rem;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card h3 {
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.card a {
+  color: #888;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card i {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* Khoảng cách */
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mt-4 {
+  margin-top: 2rem !important;
+}

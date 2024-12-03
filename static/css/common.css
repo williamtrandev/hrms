@@ -1,0 +1,390 @@
+:root {
+  --primary-color: #8e68ff;      /* Màu tím chủ đạo */
+  --secondary-color: #afa3ef;    /* Màu phụ */
+  --success-color: #28a745;      /* Màu thành công */
+  --info-color: #17a2b8;         /* Màu thông tin */
+  --warning-color: #ffc107;      /* Màu cảnh báo */
+  --danger-color: #dc3545;       /* Màu nguy hiểm */
+  --light-color: #f8f9fa;        /* Màu sáng */
+  --dark-color: #343a40;         /* Màu tối */
+
+  --text-color: #212529;         /* Màu chữ chính */
+  --background-color: #ffffff;   /* Màu nền chính */
+
+  --link-color: #007bff;         /* Màu liên kết */
+  --link-hover-color: #0056b3;   /* Màu liên kết khi hover */
+}
+
+/* Bảng */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+}
+
+/* thụt lề số trang */
+.table-container {
+    padding: 90px;
+}
+
+th {
+    background-color: #ddd2ff !important;
+    color: black; /* Màu chữ đen cho tiêu đề bảng */
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    text-align: left;
+    color: black; /* Màu chữ đen cho nội dung bảng */
+    font-size: 14px;
+}
+
+/* Nút và ô tìm kiếm */
+button {
+    background-color: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #5a4cce;
+}
+
+.search-container input[type="text"],
+.search-container input[type="date"],
+.search-container select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #dfe6e9;
+    width: 300px;
+    color: black; /* Màu chữ đen cho ô tìm kiếm */
+}
+
+/* Style cho input search */
+.search-container .position-relative {
+    width: 400px;
+}
+
+.search-container input {
+    padding-left: 40px;
+}
+
+.search-container .position-relative .btn {
+    height: 100%;
+    left: 0;
+    padding: 0 15px;
+}
+
+.search-container .position-relative .btn:hover {
+    background-color: transparent;
+}
+
+.search-container .position-relative .btn i {
+    color: #6c5ce7;
+}
+
+/* Override một số style mặc định */
+.search-container input[type="text"] {
+    width: 100%;
+}
+
+/* .search-container button {
+    background-color: transparent;
+    color: inherit;
+    font-weight: normal;
+}
+
+.search-container button:hover {
+    background-color: #f8f9fa;
+} */
+
+/* Đảm bảo icon không bị che khuất */
+.search-container .position-relative .btn {
+    z-index: 3;
+}
+
+/* Container cho phân trang */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Hiển thị số bản ghi trên mỗi trang */
+.records-per-page {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.records-per-page label {
+    color: #666;
+}
+
+.records-per-page select {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #666;
+    background-color: #f9f9f9;
+}
+
+/* Thông tin phân trang */
+.pagination-info {
+    color: #666;
+}
+
+/* Các nút điều khiển phân trang */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination-controls a {
+    color: #666;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+
+.pagination-controls a:hover {
+    background-color: #f0e9ff;
+    color: #6c5ce7;
+}
+
+.container2 {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #6c5ce7; /* Màu tím */
+    font-size: 28px; /* Cỡ chữ lớn */
+    font-weight: bold; /* Chữ đậm */
+    text-align: left; /* Căn trái */
+    margin-bottom: 20px;
+}
+
+
+
+h2 {
+    color: #7b2cbf;
+}
+
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input, select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px !important;
+}
+
+.submit-btn {
+    grid-column: span 2;
+    padding: 10px;
+    background-color: #7b2cbf;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.submit-btn:hover {
+    background-color: #5a189a;
+}
+
+/* Phần thông tin của người dùng */
+.profile {
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.profile i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+/* Định dạng chính cho tiêu đề "Trang chủ" */
+.container h1 {
+  color: #6a1b9a; /* Màu tím */
+  font-weight: bold;
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* Định dạng thẻ thông tin */
+.card {
+  border: none;
+  background-color: #f3f1fc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin: 0.5rem;
+}
+
+.card h3 {
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.card a {
+  color: #888;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+/* Điều chỉnh biểu tượng và căn chỉnh cho khớp */
+.card i {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mt-4 {
+  margin-top: 2rem !important;
+}
+
+/* Màu chữ mặc định */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f7;
+    color: #333; /* Màu chữ mặc định đen */
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.items-per-page {
+  display: flex;
+  align-items: center;
+}
+
+.items-per-page label {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.items-per-page select {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #777;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+}
+
+.pagination-controls button {
+  border: 1px solid #ddd;
+  background-color: white;
+  padding: 6px 12px;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.pagination-controls .page-number {
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+.pagination-controls .page-number.active {
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+}
+
+.pagination-controls button:hover {
+  background-color: #f0f0f0;
+}
+
+.pagination-controls .prev,
+.pagination-controls .next {
+  font-size: 18px;
+}
+
+.btn-primary-color {
+    background: var(--primary-color) !important;
+    color: white !important;
+    padding: 8px 20px !important;
+}
+
+.btn-primary-color:hover {
+    color: white !important;
+}
+
+.badge {
+    font-size: 0.95rem !important;  /* Tăng kích thước chữ */
+    padding: 8px 15px !important;   /* Tăng padding để badge rộng hơn */
+    font-weight: 500 !important;
+}
+
+.badge i {
+    font-size: 0.9rem !important;  /* Tăng kích thước icon */
+}
+
+.bg-primary {
+    background-color: #6c5ce7 !important;
+}
+
+.bg-info {
+    background-color: #0abde3 !important;
+}
+
+.bg-warning {
+    background-color: #f39c12 !important;
+    color: white;
+}
