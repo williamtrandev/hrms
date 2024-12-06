@@ -66,17 +66,26 @@
                 </div>
             </div>
         </div>
-        {% if messages %}
-        <div class="alert alert-info">
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
         <div class="d-flex justify-content-center mt-4">
             <button type="submit" class="btn btn-primary-color">Lưu</button>
         </div>
+        {% if notification %}
+        <div class="alert alert-{{ notification.type }} alert-dismissible fade show mt-3" role="alert">
+            {{ notification.message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
     </form>
 </div>
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+});
+</script>
 {% endblock %}

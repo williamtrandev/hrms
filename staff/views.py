@@ -26,7 +26,7 @@ def staff_list(request):
             Q(id__icontains=search_query) |  # Tìm theo mã nhân viên
             Q(full_name__icontains=search_query) |  # Tìm theo tên
             Q(user__email__icontains=search_query) |  # Tìm theo email
-            Q(phone_number__icontains=search_query) |  # Tìm theo số điện thoại
+            Q(phone_number__icontains=search_query) |  # T��m theo số điện thoại
             Q(department_id=search_query if search_query.isdigit() else None) |  # Tìm theo ID phòng ban
             Q(position__name__icontains=search_query)  # Tìm theo tên chức vụ
         )
@@ -56,6 +56,7 @@ def staff_list(request):
 @admin_required
 @require_http_methods(["GET", "POST"])
 def add_staff(request):
+    notification = None
     if request.method == 'POST':
         form = StaffForm(request.POST)
         if form.is_valid():
@@ -69,11 +70,17 @@ def add_staff(request):
             address = form.cleaned_data['address']
             birthdate = form.cleaned_data['birthdate']
             email = form.cleaned_data['email']
-            base_salary = form.cleaned_data['base_salary']  # Lấy từ form.cleaned_data
+            base_salary = form.cleaned_data['base_salary']
 
             if User.objects.filter(email=email).exists():
-                messages.error(request, 'Email này đã tồn tại. Vui lòng chọn email khác.')
-                return render(request, 'add_staff.html', {'form': form})
+                notification = {
+                    'type': 'error',
+                    'message': 'Email này đã tồn tại. Vui lòng chọn email khác.'
+                }
+                return render(request, 'add_staff.html', {
+                    'form': form,
+                    'notification': notification
+                })
 
             user = User.objects.create_user(username=email, email=email, password='12345678', is_staff=True)
 
@@ -90,13 +97,16 @@ def add_staff(request):
                 base_salary=base_salary
             )
 
-            messages.success(request, 'Nhân viên đã được thêm thành công!')
-            return render(request, 'add_staff.html', {'form': form})
+            notification = {
+                'type': 'success',
+                'message': 'Nhân viên đã được thêm thành công!'
+            }
     else:
         form = StaffForm()
 
     return render(request, 'add_staff.html', {
         'form': form,
+        'notification': notification
     })
 
 
@@ -111,6 +121,7 @@ def detail_staff(request, staff_id):
 @require_http_methods(["GET", "POST"])
 def edit_staff(request, staff_id):
     staff = get_object_or_404(StaffProfile, id=staff_id)
+    notification = None
 
     if request.method == 'POST':
         form = StaffForm(request.POST, instance=staff)
@@ -118,15 +129,24 @@ def edit_staff(request, staff_id):
 
         if form.is_valid():
             if staff.user.email != email and User.objects.filter(email=email).exists():
-                messages.error(request, "Email đã tồn tại. Vui lòng chọn email khác.")
+                notification = {
+                    'type': 'error',
+                    'message': 'Email đã tồn tại. Vui lòng chọn email khác.'
+                }
             else:
                 staff = form.save(commit=False)
                 staff.user.email = email
                 staff.user.save()
                 staff.save()
-                messages.success(request, "Cập nhật thông tin nhân viên thành công.")
+                notification = {
+                    'type': 'success',
+                    'message': 'Cập nhật thông tin nhân viên thành công.'
+                }
         else:
-            messages.error(request, "Có lỗi xảy ra khi cập nhật.")
+            notification = {
+                'type': 'error',
+                'message': 'Có lỗi xảy ra khi cập nhật.'
+            }
     else:
         form = StaffForm(instance=staff)
         email = staff.user.email
@@ -134,7 +154,8 @@ def edit_staff(request, staff_id):
     return render(request, 'edit_staff.html', {
         'form': form,
         'staff': staff,
-        'email': email
+        'email': email,
+        'notification': notification
     })
 
 @require_http_methods(["DELETE"])
@@ -143,7 +164,19 @@ def delete_staff(request, staff_id):
         staff = StaffProfile.objects.get(id=staff_id)
         user = staff.user
         staff.delete()
-        user.delete()  # Xóa cả user account
-        return JsonResponse({'status': 'success'})
+        user.delete()
+        return JsonResponse({
+            'status': 'success',
+            'notification': {
+                'type': 'success',
+                'message': 'Xóa nhân viên thành công'
+            }
+        })
     except StaffProfile.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Nhân viên không tồn tại'})
+        return JsonResponse({
+            'status': 'error',
+            'notification': {
+                'type': 'error',
+                'message': 'Nhân viên không tồn tại'
+            }
+        })

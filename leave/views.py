@@ -94,9 +94,8 @@ def leave_staff(request):
 
 @require_http_methods(["GET", "POST"])
 def new(request):
-    # if not request.user.is_authenticated:
-    #     return redirect('authentication:login')
     staff = StaffProfile.objects.filter(user=request.user).first()
+    notification = None
 
     if request.method == 'POST':
         form = LeaveForm(request.POST, staff=staff)
@@ -113,65 +112,75 @@ def new(request):
                 reason=reason,
                 reason_detail=reason_detail
             )
-
-            # Thông báo thành công
-            messages.success(request, "Yêu cầu nghỉ phép đã được tạo thành công.")
-            return render(request, "new.html", {
-                'form': form,
-            })
+            notification = {
+                'type': 'success',
+                'message': 'Yêu cầu nghỉ phép đã được tạo thành công.'
+            }
         else:
-            messages.error(request, "Dữ liệu không hợp lệ, vui lòng kiểm tra lại.")
+            notification = {
+                'type': 'error',
+                'message': 'Dữ liệu không hợp lệ, vui lòng kiểm tra lại.'
+            }
     else:
         form = LeaveForm(staff=staff)
 
     return render(request, "new.html", {
         'form': form,
+        'notification': notification
     })
 
 @admin_required
 @require_http_methods(["GET", "POST"])
 def details(request, leave_id):
     leave = get_object_or_404(Leave, id=leave_id)
+    notification = None
 
     if request.method == 'POST':
         form = LeaveFormAdmin(request.POST, instance=leave, staff=leave.staff)
         if form.is_valid():
             leave = form.save(commit=False)
             leave.save()
-            # Thông báo thành công
-            messages.success(request, "Yêu cầu nghỉ phép đã được cập nhật trạng thái thành công.")
-            return render(request, "details.html", {
-                'form': form,
-            })
+            notification = {
+                'type': 'success',
+                'message': 'Yêu cầu nghỉ phép đã được cập nhật trạng thái thành công.'
+            }
         else:
-            messages.error(request, "Dữ liệu không hợp lệ, vui lòng kiểm tra lại.")
+            notification = {
+                'type': 'error',
+                'message': 'Dữ liệu không hợp lệ, vui lòng kiểm tra lại.'
+            }
     else:
         form = LeaveFormAdmin(instance=leave, staff=leave.staff)
 
     return render(request, "details.html", {
         'form': form,
+        'notification': notification
     })
 
 @require_http_methods(["GET", "POST"])
 def edit(request, leave_id):
     staff = StaffProfile.objects.filter(user=request.user).first()
     leave = get_object_or_404(Leave, id=leave_id)
+    notification = None
 
     if request.method == 'POST':
         form = LeaveForm(request.POST, instance=leave, staff=staff)
         if form.is_valid():
             leave = form.save(commit=False)
             leave.save()
-            # Thông báo thành công
-            messages.success(request, "Yêu cầu nghỉ phép đã được chỉnh sửa thành công.")
-            return render(request, "edit.html", {
-                'form': form,
-            })
+            notification = {
+                'type': 'success',
+                'message': 'Yêu cầu nghỉ phép đã được chỉnh sửa thành công.'
+            }
         else:
-            messages.error(request, "Dữ liệu không hợp lệ, vui lòng kiểm tra lại.")
+            notification = {
+                'type': 'error',
+                'message': 'Dữ liệu không hợp lệ, vui lòng kiểm tra lại.'
+            }
     else:
         form = LeaveForm(instance=leave, staff=staff)
 
     return render(request, "edit.html", {
         'form': form,
+        'notification': notification
     })

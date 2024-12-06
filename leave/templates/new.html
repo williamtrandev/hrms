@@ -55,28 +55,27 @@
                 </div>
             </div>
 
-            {% if messages %}
-            <div class="alert alert-info">
-                {% for message in messages %}
-                <p>{{ message }}</p>
-                {% endfor %}
+            {% if notification %}
+            <div class="alert alert-{{ notification.type }} alert-dismissible fade show mt-3" role="alert">
+                {{ notification.message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endif %}
-            {% if form.errors %}
-    <div class="alert alert-danger">
-        <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
             <button type="submit" class="submit-btn">Lưu</button>
         </form>
     </div>
 </body>
 </html>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+});
+</script>
 {% endblock %}

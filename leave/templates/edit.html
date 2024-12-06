@@ -1,35 +1,29 @@
-{% extends 'layouts/staff.html' %}
-{% load static %}
-
-{% block title %}HRMS - Chỉnh sửa đơn nghỉ phép{% endblock %}
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/baseL.css' %}">
-{% endblock %}
-
-{% block content %}
-<div class="container my-5 d-flex flex-column align-items-center justify-content-center h-100">
+{% extends 'layouts/staff.html' %} {% load static %} {% block title %}HRMS -
+Chỉnh sửa đơn nghỉ phép{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/baseL.css' %}" />
+{% endblock %} {% block content %}
+<div
+    class="container my-5 d-flex flex-column align-items-center justify-content-center h-100"
+>
     <h2>Chỉnh sửa đơn nghỉ phép</h2>
-
 
     <form method="post" class="employee-form">
         {% csrf_token %}
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label for="ma_nv">Mã Nhân Viên</label>
-                {{ form.staff_id }}
-                {% if form.staff_id.errors %}
-                    <div class="text-danger mt-1">
-                        {{ form.staff_id.errors|join:", " }}
-                    </div>
+                {{ form.staff_id }} {% if form.staff_id.errors %}
+                <div class="text-danger mt-1">
+                    {{ form.staff_id.errors|join:", " }}
+                </div>
                 {% endif %}
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label for="ho_va_ten">Họ Và Tên Nhân Viên</label>
-                {{ form.staff_fullname }}
-                {% if form.staff_fullname.errors %}
-                    <div class="text-danger mt-1">
-                        {{ form.staff_fullname.errors|join:", " }}
-                    </div>
+                {{ form.staff_fullname }} {% if form.staff_fullname.errors %}
+                <div class="text-danger mt-1">
+                    {{ form.staff_fullname.errors|join:", " }}
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -37,20 +31,18 @@
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label for="chuc_vu">Chức Vụ</label>
-                {{ form.staff_position }}
-                {% if form.staff_position.errors %}
-                    <div class="text-danger mt-1">
-                        {{ form.staff_position.errors|join:", " }}
-                    </div>
+                {{ form.staff_position }} {% if form.staff_position.errors %}
+                <div class="text-danger mt-1">
+                    {{ form.staff_position.errors|join:", " }}
+                </div>
                 {% endif %}
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label for="ly_do_nghi">Lý Do Nghỉ</label>
-                {{ form.reason }}
-                {% if form.reason.errors %}
-                    <div class="text-danger mt-1">
-                        {{ form.reason.errors|join:", " }}
-                    </div>
+                {{ form.reason }} {% if form.reason.errors %}
+                <div class="text-danger mt-1">
+                    {{ form.reason.errors|join:", " }}
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -58,20 +50,18 @@
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label for="bd_nghiphep">Bắt Đầu Nghỉ Phép</label>
-                {{ form.start_date }}
-                {% if form.start_date.errors %}
-                    <div class="text-danger mt-1">
-                        {{ form.start_date.errors|join:", " }}
-                    </div>
+                {{ form.start_date }} {% if form.start_date.errors %}
+                <div class="text-danger mt-1">
+                    {{ form.start_date.errors|join:", " }}
+                </div>
                 {% endif %}
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label for="kt_nghiphep">Kết Thúc Nghỉ Phép</label>
-                {{ form.end_date }}
-                {% if form.end_date.errors %}
-                    <div class="text-danger mt-1">
-                        {{ form.end_date.errors|join:", " }}
-                    </div>
+                {{ form.end_date }} {% if form.end_date.errors %}
+                <div class="text-danger mt-1">
+                    {{ form.end_date.errors|join:", " }}
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -79,63 +69,56 @@
         <div class="row">
             <div class="form-group w-100 mb-3">
                 <label for="ly_do_chi_tiet">Lý Do Chi Tiết (Nếu Có)</label>
-                {{ form.reason_detail }}
-                {% if form.reason_detail.errors %}
-                    <div class="text-danger mt-1">
-                        {{ form.reason_detail.errors|join:", " }}
-                    </div>
+                {{ form.reason_detail }} {% if form.reason_detail.errors %}
+                <div class="text-danger mt-1">
+                    {{ form.reason_detail.errors|join:", " }}
+                </div>
                 {% endif %}
             </div>
         </div>
 
-        <div class="row">
-            {% if form.non_field_errors %}
-            <div class="alert alert-danger w-100 mb-4">
-                {% for error in form.non_field_errors %}
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span>{{ error }}</span>
-                    </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == 'success' %}
-                    <div class="alert alert-{{ message.tags }} w-100 mb-4">
-                        <div class="d-flex align-items-center gap-2">
-                            
-                                <i class="fas fa-check-circle"></i>
-                                <span>{{ message }}</span>
-                            
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
         <button type="submit" class="submit-btn">Lưu</button>
+
+        {% if notification %}
+        <div class="alert alert-{{ notification.type }} alert-dismissible fade show mt-3" role="alert">
+            {{ notification.message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
     </form>
 </div>
 
 <style>
-.alert {
-    border-radius: 8px;
-    padding: 1rem;
-}
+    .alert {
+        border-radius: 8px;
+        padding: 1rem;
+    }
 
-.alert-danger {
-    background-color: #fff3f3;
-    border: 1px solid #dc3545;
-    color: #dc3545;
-}
+    .alert-danger {
+        background-color: #fff3f3;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+    }
 
-.text-danger {
-    font-size: 0.875rem;
-}
+    .text-danger {
+        font-size: 0.875rem;
+    }
 
-.fas.fa-exclamation-circle {
-    color: #dc3545;
-}
+    .fas.fa-exclamation-circle {
+        color: #dc3545;
+    }
 </style>
+
+<script>
+    // Tự động ẩn alert sau 5 giây
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            const alerts = document.querySelectorAll(".alert");
+            alerts.forEach(function (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    });
+</script>
 {% endblock %}

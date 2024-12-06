@@ -379,7 +379,7 @@ def calculate_bonus(normal_days, overtime_hours, late_days, base_salary):
     - Lương cơ bản
     """
     bonus = 0
-    standard_days = 26
+    standard_days = 22
     
     # Thưởng đi làm đủ ngày
     if normal_days >= standard_days:
@@ -402,7 +402,7 @@ def calculate_total_salary(base_salary, work_stats, bonus):
     - Thống kê làm việc
     - Thưởng
     """
-    standard_days = 26
+    standard_days = 22
     daily_salary = base_salary / standard_days
     
     # Lương cơ bản theo ngày làm việc
