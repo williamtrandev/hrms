@@ -474,7 +474,7 @@ def check_attendance(request):
             date_work=today,
             defaults={
                 'checkin': current_time,
-                'is_late': current_time > time(8, 30)
+                'is_late': current_time > time(8, 0)
             }
         )
         

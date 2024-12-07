@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 urlpatterns = [
     path('', lambda request: redirect('auth/login')),
 
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
 
     # Authentication
     path('auth', include('authentication.urls')),
