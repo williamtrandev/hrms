@@ -15,7 +15,7 @@
                 <a class="nav-link {% if 'salaries' in request.path %}active{% endif %}" href="/salaries/me">Bảng Lương</a>
             </li>
             <li>
-                <a class="nav-link {% if 'detail' in request.path %}active{% endif %}" href="/staff/detail/{{ user.staff_profile.id }}">Hồ sơ</a>
+                <a class="nav-link {% if 'detail' in request.path %}active{% endif %}" href="/staff/detail/{{ user.staff_profile.id }}">Nhân viên</a>
             </li>
         </ul>
         <div class="dropdown" style="cursor: pointer">

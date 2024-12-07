@@ -9,6 +9,12 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from authentication.decorators import admin_required
 
+def get_layout_by_user(user):
+    """Helper function để xác định layout dựa trên user"""
+    if user.is_superuser or user.is_staff:  # Nếu là admin
+        return 'layouts/admin.html'
+    return 'layouts/staff.html'  # Nếu là staff thường
+
 @admin_required
 @require_http_methods(["GET"])
 def staff_list(request):
@@ -26,7 +32,7 @@ def staff_list(request):
             Q(id__icontains=search_query) |  # Tìm theo mã nhân viên
             Q(full_name__icontains=search_query) |  # Tìm theo tên
             Q(user__email__icontains=search_query) |  # Tìm theo email
-            Q(phone_number__icontains=search_query) |  # T��m theo số điện thoại
+            Q(phone_number__icontains=search_query) |  # Tìm theo số điện thoại
             Q(department_id=search_query if search_query.isdigit() else None) |  # Tìm theo ID phòng ban
             Q(position__name__icontains=search_query)  # Tìm theo tên chức vụ
         )
@@ -115,6 +121,7 @@ def detail_staff(request, staff_id):
     staff = get_object_or_404(StaffProfile, id=staff_id)
     return render(request, 'staff_detail.html', {
         'staff': staff,
+        'base_layout': get_layout_by_user(request.user)
     })
 
 

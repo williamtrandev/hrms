@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'staff',
     'authentication',
     'django.contrib.humanize',
-    'core'
 ]
 
 MIDDLEWARE = [
@@ -58,7 +57,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.MessageMiddleware',
 ]
 
 ROOT_URLCONF = 'HRMS.urls'
