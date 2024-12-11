@@ -33,7 +33,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <input type="date" name="date" class="form-control" value="{{ date_filter }}" placeholder="Chọn ngày">
+            <input type="date" name="date" class="form-control" value="{{ date_filter }}">
             <button type="submit" class="btn btn-primary-color"><i class="fas fa-filter me-2"></i>Lọc</button>
             <a href="{% url 'attendance:correction_response' %}" class="btn btn-primary-color">
                 Xem Yêu Cầu Xử Lý
@@ -51,6 +51,7 @@
                 <th>Tình Trạng</th>
                 <th>Check-In</th>
                 <th>Check-Out</th>
+                <th>Ngày Làm Việc</th>
                 <th>Tổng Giờ Làm</th>
                 <th>Overtime</th>
             </tr>
@@ -70,6 +71,7 @@
                 </td>
                 <td>{{ attendance.checkin|time:"H:i" }}</td>
                 <td>{{ attendance.checkout|time:"H:i" }}</td>
+                <td>{{ attendance.date_work|date:"d/m/Y" }}</td>
                 <td>
                     {% if attendance.total_working %}
                         {{ attendance.total_working }} Giờ
